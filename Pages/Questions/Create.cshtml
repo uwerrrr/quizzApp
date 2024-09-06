@@ -1,0 +1,46 @@
+@page
+@model quizzApp.Pages.Questions.Create
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<h2>Create Question</h2>
+<div>
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Question.Text">Question </label>
+            <input asp-for="Question.Text" class="form-control" />
+            <span asp-validation-for="Question.Text" class="text-danger"></span>
+        </div>
+
+        <fieldset>
+            <legend>Answers</legend>
+            @for (int i = 0; i < 4; i++)
+            {
+            <div class="form-group">
+                <label asp-for="Answers[i].Text">
+                    Answer @(i + 1) (@(i == 0 ? "Correct answer" : "False answer"))
+                </label>
+                <input asp-for="Answers[i].Text" class="form-control" />
+                <span asp-validation-for="Answers[i].Text" class="text-danger"></span>
+                <input asp-for="Answers[i].IsCorrect" type="hidden" value="@(i == 0 ? "true" : "false")"/>
+            </div>
+            }
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+
+</div>
+</body>
+</html>
