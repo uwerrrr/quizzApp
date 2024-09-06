@@ -5,3 +5,4 @@ riderModule.iml
 /_ReSharper.Caches/
 db/.DS_Store
 .DS_Store
+/Migrations
