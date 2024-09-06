@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using quizzApp.Data;
+
 namespace quizzApp;
 
 public class Program
@@ -8,6 +11,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
+        
+        builder.Services.AddDbContext<AppDbContext>(options =>
+        {
+            // Configure Entity Framework Core to connect to database
+            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+        }); 
 
         var app = builder.Build();
 
