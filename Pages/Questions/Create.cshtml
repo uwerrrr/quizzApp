@@ -16,7 +16,10 @@
 <div>
     <form method="post">
         <div asp-validation-summary="All" class="text-danger"></div>
-
+        @* asp-validation-summary="All": This attribute specifies that the validation summary should include all validation errors, both model-level and property-level errors. 
+            display unordered list (<ul>) of all validation error messages *@
+        
+        
         <div class="form-group">
             <label asp-for="Question.Text">Question </label>
             <input asp-for="Question.Text" class="form-control" />

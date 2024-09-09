@@ -13,9 +13,7 @@ public class Create : PageModel
     {
         _context = context;
     }
-
     
-    public int maxId = 0;
 
     [BindProperty] 
     public Question Question { get; set; }
