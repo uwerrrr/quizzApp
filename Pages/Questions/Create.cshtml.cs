@@ -32,19 +32,39 @@ public class Create : PageModel
         {
             return Page();
         }
-        
-        // First, add the new Question
-        _context.Questions.Add(Question);
-        await _context.SaveChangesAsync(); 
 
-        // Then, link the new Answers to the newly created Question
-        foreach (var answer in Answers)
+        using (var transaction = _context.Database.BeginTransaction())
         {
-            answer.QuestionId = Question.Id;
-            _context.Answers.Add(answer);
-        }
-        await _context.SaveChangesAsync();
+            try
+            {
+                // First, add the new Question
+                _context.Questions.Add(Question);
+                await _context.SaveChangesAsync();
+                
+                // Then, link the new Answers to the newly created Question
+                foreach (var answer in Answers)
+                {
+                    answer.QuestionId = Question.Id;
+                    _context.Answers.Add(answer);
+                }
+                await _context.SaveChangesAsync();
 
-        return RedirectToPage("/Index");  // Redirect after successful save
+                // Commit the transaction
+                await transaction.CommitAsync();
+
+                return RedirectToPage("./View");  // Redirect after successful save
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                
+                // Rollback the transaction if an error occurs
+                await transaction.RollbackAsync();
+                
+                throw;
+            }
+        }
+
+        
     }
 }

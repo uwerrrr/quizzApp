@@ -9,5 +9,5 @@ public class Question
     
     public string Text { get; set; }
     
-    public ICollection<Answer>? Answers { get; set; } // Collection navigation containing dependents
+    public List<Answer>? Answers { get; set; } // Collection navigation containing dependents
 }

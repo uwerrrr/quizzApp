@@ -2,18 +2,42 @@
 @model quizzApp.Pages.Questions.Edit
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Edite page";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
+<div class="container">
+    <h2>Edit Question</h2>
     
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger m-4"></div>
+        <input type="hidden" asp-for="Question.Id" />
+
+        <div class="form-group m-4">
+            <label asp-for="Question.Text" class="h4">Question</label>
+            <input asp-for="Question.Text" class="form-control"/>
+            <span asp-validation-for="Question.Text" class="text-danger"></span>
+        </div>
+
+        <fieldset class="m-4">
+            <h4 class="h4">Answers</h4>
+            <ul class="list-group">
+                @for (int i = 0; i < Model.Question.Answers.Count; i++)
+                {
+                    <li class="list-group-item">
+                        <input asp-for="Question.Answers[i].IsCorrect" type="hidden" value="@(i == 0 ? "true" : "false")"/>
+                        <label asp-for="Question.Answers[i].Text">
+                            Answer @(i + 1) (@(i == 0 ? "Correct answer" : "False answer")):
+                        </label>@* e.g. Answer 1 (correct answer): *@
+                        <input asp-for="Question.Answers[i].Text" class="form-control" />
+                        <span asp-validation-for="Question.Answers[i].Text" class="text-danger"></span>
+                    </li>
+                }
+            </ul>
+        </fieldset>
+
+        <div class="form-group m-4">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-page="./View" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
 </div>
-</body>
-</html>

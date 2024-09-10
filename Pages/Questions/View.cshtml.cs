@@ -6,13 +6,13 @@ using quizzApp.Models;
 
 namespace quizzApp.Pages.Questions;
 
-public class View : PageModel
+public class ViewModel : PageModel
 {
     // db context
     private readonly AppDbContext _context;
     
     // constructor
-    public View(AppDbContext context)
+    public ViewModel(AppDbContext context)
     {
         _context = context;
     }
@@ -27,14 +27,18 @@ public class View : PageModel
             .ToListAsync();
     }
     
+    // delete on post
     public async Task<IActionResult> OnPostDeleteAsync(int id)
     {
+        // Finds an entity with the given primary key values
         var question = await _context.Questions.FindAsync(id);
+        
         if (question != null)
         {
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
         }
+        
         return RedirectToPage();
     }
 }

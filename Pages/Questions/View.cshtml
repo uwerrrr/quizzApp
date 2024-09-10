@@ -1,62 +1,77 @@
 @page
-@model quizzApp.Pages.Questions.View
+@model ViewModel
 
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Question management page";
 }
 
 
 <h2 class="text-center">Existing Questions</h2>
-<table>
+
+@* add new question btn *@
+
+<a asp-page="./Create" class="btn btn-primary text-center mx-auto my-4">Add New Question</a>
+
+
+<table class="table table-bordered align-middle">
     <thead>
     <tr>
-        <th>Question</th>
-        <th>Actions</th>
+        <th scope="col">Question</th>
+        <th scope="col">Answers</th>
+        <th scope="col">Actions</th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var question in Model.Questions)
-    {
-        <tr>
-            <!-- Display Question Text -->
-            <td>@question.Text</td>
+        @foreach (var question in Model.Questions)
+        {
+            <tr>
+                <!-- Display Question Text -->
+                <th scope="row">@question.Text</th>
 
-            <!-- Display All Answers in a Comma-Separated Format -->
-            <td>
-                @foreach (var answer in question.Answers)
-                {
-                    <ul>
-                        @if (answer.IsCorrect)
-                        {
-                            <span class="text-capitalize text-danger">@answer.Text</span>
-                        }
-                        else
-                        {
-                            <span >@answer.Text</span>
-                        }
-                    </ul>
-                }
-            </td>
+                <!-- Display All Answers in a Comma-Separated Format -->
+                <td>
+                    @foreach (var answer in question.Answers)
+                    {
+                        <ul>
+                            @if (answer.IsCorrect)
+                            {
+                                <li class="fw-bold text-success">@answer.Text</li>
+                            }
+                            else
+                            {
+                                <li >@answer.Text</li>
+                            }
+                        </ul>
+                    }
+                </td>
 
-            <!-- Show Which Answer is Correct -->
-            <td>
-                @foreach (var answer in question.Answers.Where(a => a.IsCorrect))
-                {
-                    <span>@answer.Text</span>
-                    <br/>
-                }
-            </td>
+                @*<!-- Show Which Answer is Correct -->
+                <td>
+                    @foreach (var answer in question.Answers.Where(a => a.IsCorrect))
+                    {
+                        <span>@answer.Text</span>
+                        <br/>
+                    }
+                </td>*@
 
-            <!-- Actions to Edit or Delete Question -->
-            <td>
-                <a asp-page="/Questions/Edit" asp-route-id="@question.Id">Edit</a> |
-                <form method="post" asp-page-handler="Delete" asp-route-id="@question.Id" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this question?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-    }
+                <!-- Actions to Edit or Delete Question -->
+                <td class="">
+                    <div class="d-flex gap-4 ">
+                        <a asp-page="/Questions/Edit" asp-route-id="@question.Id">Edit</a> 
+                        
+                        <span>|</span>
+                        
+                        @* asp-page-handler="Delete": call post delete request - OnPostDelete handler method *@
+                        @* asp-route-id: route parameter, passing data to the handler method *@
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@question.Id" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this question?');">Delete</button>
+                        </form>
+                    </div>
+                </td>
+                
+            </tr>
+        }
     
-
+        
     </tbody>
 </table>
