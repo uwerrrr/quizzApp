@@ -8,6 +8,8 @@ namespace quizzApp.Pages.Quiz;
 
 public class StartModel : PageModel
 {
+    private static Random rng = new Random();
+    
     // db context
     private readonly AppDbContext _context;
     
@@ -23,14 +25,23 @@ public class StartModel : PageModel
     public List<int> UserAnswerIdList { get; set; }
 
     public int Score { get; set; }
-
+    
     public async Task OnGetAsync()
     {
-        Questions = await _context.Questions
+        // Fetch all questions with their answers
+        var allQuestions = await _context.Questions
             .Include(q => q.Answers)
             .ToListAsync();
 
-        // UserAnswerIdList = new List<int>(new int[Questions.Count]);
+        // Randomize the order of questions
+        Questions = allQuestions.OrderBy(q => rng.Next()).ToList();
+        
+        // Randomize the order of answers for each question
+        foreach (var question in Questions)
+        {
+            question.Answers = question.Answers.OrderBy(a => rng.Next()).ToList();
+        }
+
         UserAnswerIdList = new List<int>(Questions.Count);
     }
 
