@@ -13,7 +13,7 @@ public class AppDbContext : DbContext
 {   // represent tables in database
     public DbSet<Question> Questions { get; set; }
     public DbSet<Answer> Answers { get; set; }
-    // public DbSet<Quiz> Quizzes { get; set; }
+    public DbSet<Score> Scores { get; set; }
 
     // constructor
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)  { }
@@ -23,15 +23,6 @@ public class AppDbContext : DbContext
     {
         // Call the base method to ensure any default behavior from DbContext is applied
         base.OnModelCreating(modelBuilder);
-        
-        // // Seed data for the Quiz entity
-        // modelBuilder.Entity<Quiz>().HasData(
-        //     new Quiz
-        //     {
-        //         Id = 1,                     
-        //         Title = "Geography Quiz"     
-        //     }
-        // );
 
         // Seed data for the Question entity
         modelBuilder.Entity<Question>().HasData(
@@ -65,6 +56,16 @@ public class AppDbContext : DbContext
                 Text = "Rome",
                 IsCorrect = false,
                 QuestionId = 1
+            }
+        );
+        
+        // Seed data for Score
+        modelBuilder.Entity<Score>().HasData(
+            new Score
+            {
+                Id = 1,
+                TakerName = "John Doe",
+                ScorePercent = 24.5F
             }
         );
     }    
