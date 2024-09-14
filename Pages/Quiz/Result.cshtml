@@ -1,0 +1,38 @@
+@page
+@model quizzApp.Pages.Quiz.ResultModel
+
+@{
+    ViewData["Title"] = "Quiz Result page";
+}
+
+<h1>Quiz Result</h1>
+
+<div class="alert alert-info">
+    <h2>Your Score</h2>
+    <p>Name: @Model.CurrentScore.TakerName</p>
+    <p>Score: @Model.CurrentScore.ScorePercent%</p>
+</div>
+
+<h2>All Scores</h2>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th class="col-4">Name</th>
+        <th class="col-4">Score</th>
+        <th class="col-4">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var score in Model.AllScores)
+    {
+        <tr class="@(score.Id == Model.CurrentScore.Id ? "table-primary" : "")">
+            <td class="col-4">@score.TakerName</td>
+            <td class="col-4">@score.ScorePercent%</td>
+            <td class="col-4">@score.DateTaken.ToLocalTime().ToString("dd-MM-yyyy HH:mm:ss")</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-page="./Start" class="btn btn-primary">Take Another Quiz</a>
