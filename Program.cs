@@ -9,14 +9,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddRazorPages();
-        
-        builder.Services.AddDbContext<AppDbContext>(options =>
-        {
-            // Configure Entity Framework Core to connect to database
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionString"));
-        }); 
+        // **** Add services to the container. ****
+            // Razor pages service
+            builder.Services.AddRazorPages();
+            
+            // Database context service
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                // Configure Entity Framework Core to connect to database
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+            }); 
 
         var app = builder.Build();
 
