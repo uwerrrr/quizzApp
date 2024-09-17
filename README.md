@@ -1,6 +1,6 @@
 # Online Quiz Application
 
-![Build Status](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)
+[![.NET build status](https://github.com/uwerrrr/quizzApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/uwerrrr/quizzApp/actions/workflows/dotnet.yml)
 
 ## Demo & Snippets
 
