@@ -36,6 +36,9 @@ namespace quizzApp.Pages.Quiz
         [BindProperty]
         public Models.Score CurrentScore { get; set; }
         
+           
+        public int NumberOfQuestions { get; set; }
+        public int TimeLimitInSeconds { get; set; } // Time limit in seconds
         
         public async Task OnGetAsync()
         {
@@ -57,9 +60,18 @@ namespace quizzApp.Pages.Quiz
                 question.Answers = answersArr.ToList();
             }
             
+            // time limit = (NumberOfQuestions + 2) minutes
+            NumberOfQuestions = Questions.Count;
+            TimeLimitInSeconds = (NumberOfQuestions + 2) * 60;
+            
             // Initialize UserAnswerList
             UserAnswerList = Questions.Select(q => new UserAnswer { QuestionId = q.Id }).ToList();
             
+            // Set default value for the user's name
+            if (string.IsNullOrEmpty(CurrentScore?.TakerName))
+            {
+                CurrentScore = new Models.Score { TakerName = "Anonymous" };
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
