@@ -5,12 +5,8 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1>Welcome to the Quiz Application</h1>
-    <p>Take a quiz and test your knowledge!</p>
-    <a asp-page="/Quiz/Start">Start Quiz</a>
-    <a asp-page="/Questions/View">Manage questions</a>
-    <a asp-page="/Questions/Create">Add a question</a>
-    <a asp-page="/Questions/Edit">Edit a question</a>
-    <a asp-page="/Quiz/Score">Quiz score</a>
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+    <h1 class="mb-4">Welcome to the Quiz Application</h1>
+    <p class="lead mb-4">Take a quiz and test your knowledge!</p>
+    <a href="/Quiz/Start" class="btn btn-primary btn-lg">Start Quiz</a>
 </div>
