@@ -2,6 +2,12 @@
 
 [![.NET build status](https://github.com/uwerrrr/quizzApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/uwerrrr/quizzApp/actions/workflows/dotnet.yml)
 
+This is an online quiz application that can create, manage, and participate in quizzes. This project has been implemented by using **.NET Core**, **Entity Framework**, and **Razor Pages**. 
+
+Besides, it maintains an attractive interface that will allow users to take quizzes, keeping track of their results and managing questions.
+
+This project is supposed to be hands-on practice for C#, .NET Core, and Entity Framework.
+
 ## Demo & Snippets
 
 <!-- -   Hosted link: -->
