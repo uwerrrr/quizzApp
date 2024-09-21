@@ -86,6 +86,7 @@ This project is supposed to be hands-on practice for C#, .NET Core, and Entity F
   - Result Page: Displays the user's score upon finishing the quiz and displays the ranking of the current attempt among all recorded results.
 - **Random Question Order**: Implemented randomization of questions and the order of their answers for each quiz attempt.
 - **Question-Answer Relationship**: Utilizes a 1-to-many relationship between questions and answers.
+- **Time limit**: Each quiz will have a time limit (in minutes) set to the number of questions plus an additional 2 bonus minutes.
 
 ---
 
@@ -98,14 +99,19 @@ This project is supposed to be hands-on practice for C#, .NET Core, and Entity F
 
 ## Future Goals
 
-- Add a time limit feature for quiz completion.
 - Optimize database queries for faster submission.
 
 ---
 
-<!-- ## Change Logs -->
+## Change Logs
+- [x] Added question management pages: create, edit and delete questions. 
+- [x] Added quizz taking page.
+- [x] Order questions randomly for every trying of the quiz.  
+- [x] Created results page that includes ranking and tracking of historic results.  
+- [X] Set quiz time limits based on the number of questions with additional bonus time.
+- [ ] Implement Repository and Service pattern.
 
-<!-- --- -->
+--- 
 
 ## What Did You Struggle With?
 
