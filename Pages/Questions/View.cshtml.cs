@@ -2,43 +2,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using quizzApp.Data;
+using quizzApp.Interfaces;
 using quizzApp.Models;
 
 namespace quizzApp.Pages.Questions;
 
 public class ViewModel : PageModel
 {
-    // db context
-    private readonly AppDbContext _context;
+    // service
+    private readonly IQuestionService _questionService;
     
     // constructor
-    public ViewModel(AppDbContext context)
+    public ViewModel(IQuestionService questionService)
     {
-        _context = context;
+        _questionService = questionService;
     }
     
     public List<Question> Questions { get; set; } = new List<Question>();
     
     public async Task OnGetAsync()
     {
-        // Fetch questions and include answers
-        Questions = await _context.Questions
-            .Include(q => q.Answers)  // Eager load answers for each question
-            .ToListAsync();
+        // Fetch questions and its answers
+        Questions = await _questionService.GetAllQuestionsWithAnswersAsync();
     }
     
     // delete on post
     public async Task<IActionResult> OnPostDeleteAsync(int id)
-    {
-        // Finds an entity with the given primary key values
-        var question = await _context.Questions.FindAsync(id);
+    {   
+        // remove questions and its answers
+        await _questionService.RemoveQuestionWithAnswersByIdAsync(id);
         
-        if (question != null)
-        {
-            _context.Questions.Remove(question);
-            await _context.SaveChangesAsync();
-        }
-        
+        // reload page
         return RedirectToPage();
     }
 }
