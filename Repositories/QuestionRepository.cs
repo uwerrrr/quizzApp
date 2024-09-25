@@ -47,7 +47,8 @@ public class QuestionRepository: IQuestionRepository
     
     public async Task UpdateQuestionAsync(Question question)
     {
-        _context.Attach(question).State = EntityState.Modified;
+        // _context.Attach(question).State = EntityState.Modified;
+        _context.Update(question);
         await _context.SaveChangesAsync();
     }
     

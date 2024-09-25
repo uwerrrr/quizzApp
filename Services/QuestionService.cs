@@ -20,11 +20,13 @@ public class QuestionService : IQuestionService
         return await _questionRepository.GetAllQuestionsWithAnswersAsync();
     }
     
+    // get a question with its answers
     public async Task<Question> GetQuestionWithAnswersByIdAsync(int id)
     {
         return await _questionRepository.GetQuestionWithAnswersByIdAsync(id);
     }
 
+    // add a question with its answers
     public async Task AddQuestionWithAnswerAsync(Question question, List<Answer> answers)
     {
         await _questionRepository.AddQuestionAsync(question);
@@ -35,13 +37,32 @@ public class QuestionService : IQuestionService
         await _answerService.AddAnswersAsync(answers);
     }
     
-    public async Task UpdateQuestionWithAnswersAsync(Question question, List<Answer> newAnswers)
+    // update a question with its answers
+    public async Task UpdateQuestionWithAnswersAsync(Question questionToUpdate)
     {
-        await _answerService.RemoveAnswersByQuestionIdAsync(question.Id);
-        await _questionRepository.UpdateQuestionAsync(question);
-        await _answerService.AddAnswersAsync(newAnswers);
+        var existingQuestion = await GetQuestionWithAnswersByIdAsync(questionToUpdate.Id);
+        if (existingQuestion == null)
+        {
+            throw new Exception($"Question with id {questionToUpdate.Id} does not exist");
+        }
+        
+        // Update the question text
+        existingQuestion.Text = questionToUpdate.Text;
+
+        // Update the answers
+        for (int i = 0; i < existingQuestion.Answers.Count; i++)
+        {
+            existingQuestion.Answers[i].Text = questionToUpdate.Answers[i].Text;
+            existingQuestion.Answers[i].IsCorrect = questionToUpdate.Answers[i].IsCorrect;
+            
+        }
+
+        // Save changes via the repository
+        await _questionRepository.UpdateQuestionAsync(existingQuestion);
+        
     }
-    
+
+    // remove a question with its answers
     public async Task RemoveQuestionWithAnswersByIdAsync(int id)
     {
         // Finds an entity with the given primary key values
