@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using quizzApp.Data;
+using quizzApp.Interfaces;
+using quizzApp.Repositories;
+using quizzApp.Services;
 
 namespace quizzApp;
 
@@ -18,7 +21,13 @@ public class Program
             {
                 // Configure Entity Framework Core to connect to database
                 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionString"));
-            }); 
+            });
+
+            // Registering Services and Repositories
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
+            builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+            builder.Services.AddScoped<IAnswerService, AnswerService>();
 
         var app = builder.Build();
 
