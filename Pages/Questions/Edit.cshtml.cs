@@ -2,19 +2,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using quizzApp.Data;
+using quizzApp.Interfaces;
 using quizzApp.Models;
 
 namespace quizzApp.Pages.Questions;
 
 public class Edit : PageModel
 {
-    // db context
-    private readonly AppDbContext _context;
 
+    // service
+    private readonly IQuestionService _questionService;
+    
     // constructor
-    public Edit(AppDbContext context)
+    public Edit(IQuestionService questionService)
     {
-        _context = context;
+        _questionService = questionService;
     }
 
     [BindProperty] 
@@ -27,10 +29,8 @@ public class Edit : PageModel
         if (id == null) return NotFound();
         
         // search existing question and related answers in db
-        Question = await _context.Questions
-            .Include(q => q.Answers)
-            .FirstOrDefaultAsync(q => q.Id == id);
-
+        Question = await _questionService.GetQuestionWithAnswersByIdAsync(id.Value);
+        
 
         if (Question == null) return NotFound();
 
@@ -46,35 +46,18 @@ public class Edit : PageModel
             return Page();
         }
         
-        // Remove existing answers
-        _context.Answers.RemoveRange(_context.Answers.Where(a => a.QuestionId == Question.Id));
-
-        // Upate question and answer db
-        _context.Attach(Question).State = EntityState.Modified;
-            /*EF Core is tracking an entity (like Question), it also automatically tracks its related entities (like Answers) if they are included in the model
-            _context.Attach(Question):
-            Tracks the Question entity.
-            EntityState.Modified:
-            Signale EF Core to update it in the database*/
-
+        
         try
         {
-            // Save the changes to the database
-            await _context.SaveChangesAsync();
+            // Update using the service
+            await _questionService.UpdateQuestionWithAnswersAsync(Question);
         }
-        catch (DbUpdateConcurrencyException)
+        catch (Exception ex)
         {
-            // If a concurrency exception occurs, check if the question still exists
-            if (!_context.Questions.Any(q => q.Id == Question.Id))
-            {
-                // If the question is no longer found, return a 404 Not Found response
-                return NotFound();
-            }
-            else
-            {
-                // If the question still exists, re-throw the exception to handle it further
-                throw;
-            }
+            // Handle exceptions (e.g., question not found)
+            var errorMessage = !string.IsNullOrWhiteSpace(ex.Message) ? ex.Message : "An error occurred while updating the question.";
+            ModelState.AddModelError(string.Empty, errorMessage);
+            return Page();
         }
         
         return RedirectToPage("./View");

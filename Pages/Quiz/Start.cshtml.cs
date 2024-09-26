@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using quizzApp.Data;
+using quizzApp.Interfaces;
 using quizzApp.Models;
+using quizzApp.Services;
 
 namespace quizzApp.Pages.Quiz
 {
@@ -16,14 +18,15 @@ namespace quizzApp.Pages.Quiz
 
     public class StartModel : PageModel
     {
-       
-        // db context
-        private readonly AppDbContext _context;
+        // services
+        private readonly IQuestionService _questionService;
+        private readonly IScoreService _scoreService;
 
         // constructor
-        public StartModel(AppDbContext context)
+        public StartModel(IQuestionService questionService, IScoreService scoreService)
         {
-            _context = context;
+            _questionService = questionService;
+            _scoreService = scoreService;
         }
 
     
@@ -43,9 +46,7 @@ namespace quizzApp.Pages.Quiz
         public async Task OnGetAsync()
         {
             // Fetch all questions with their answers
-            var allQuestions = await _context.Questions
-                .Include(q => q.Answers)
-                .ToListAsync();
+            var allQuestions = await _questionService.GetAllQuestionsWithAnswersAsync();
 
             // Shuffle questions
             var allQuestionsArr = allQuestions.ToArray();
@@ -98,8 +99,7 @@ namespace quizzApp.Pages.Quiz
             
 
             // Save user's score to the database
-            _context.Scores.Add(CurrentScore);
-            await _context.SaveChangesAsync();
+            await _scoreService.AddScoreAsync(CurrentScore);
             Console.WriteLine("CurrentScore.Id: " + CurrentScore.Id);
             
             
@@ -118,19 +118,17 @@ namespace quizzApp.Pages.Quiz
             var answeredQuestionIds = UserAnswerList.Select(ua => ua.QuestionId).ToList();
 
             // Fetch only the questions that are in UserAnswerList
-            var questions = await _context.Questions
-                .Where(q => answeredQuestionIds.Contains(q.Id))
-                .Include(q => q.Answers)
-                .ToListAsync();
+            var dbQuestions = await _questionService.GetQuestionListWithAnswersByIdListAsync(answeredQuestionIds);
+            
 
             foreach (var userAnswer in UserAnswerList)
             {
                 // get answered question
-                var question = questions.FirstOrDefault(q => q.Id == userAnswer.QuestionId);
-                if (question != null)
+                var dbQuestion = dbQuestions.FirstOrDefault(q => q.Id == userAnswer.QuestionId);
+                if (dbQuestion != null)
                 {
                     // get correct answer of answered question & compare
-                    var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
+                    var correctAnswer = dbQuestion.Answers.FirstOrDefault(a => a.IsCorrect);
                     if (correctAnswer != null && userAnswer.AnswerId == correctAnswer.Id)
                     {
                         correctAnswersCount++;
@@ -138,7 +136,7 @@ namespace quizzApp.Pages.Quiz
                 }
             }
 
-            return (float)Math.Round((correctAnswersCount / (float)questions.Count) * 100, 1);
+            return (float)Math.Round((correctAnswersCount / (float)dbQuestions.Count) * 100, 1);
         }
     }
 }

@@ -2,16 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using quizzApp.Data;
+using quizzApp.Interfaces;
 
 namespace quizzApp.Pages.Quiz;
 
 public class ResultModel : PageModel
 {
-    private readonly AppDbContext _context;
 
-    public ResultModel(AppDbContext context)
+    private readonly IScoreService _scoreService;
+
+    public ResultModel(IScoreService scoreService)
     {
-        _context = context;
+        _scoreService = scoreService;
     }
 
     // auto bind (in GET request) the properties of CurrentScore with the values from the URL
@@ -41,9 +43,7 @@ public class ResultModel : PageModel
         
         
         // Fetch all scores from the database order by score desc
-        AllScores = await _context.Scores
-            .OrderByDescending(s => s.ScorePercent)
-            .ToListAsync();
+        AllScores = await _scoreService.GetAllScoresSortedByScorePercent(ascending: false);
 
         return Page();
     }
