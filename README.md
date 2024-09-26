@@ -109,7 +109,7 @@ This project is supposed to be hands-on practice for C#, .NET Core, and Entity F
 - [x] Order questions randomly for every trying of the quiz.  
 - [x] Created results page that includes ranking and tracking of historic results.  
 - [X] Set quiz time limits based on the number of questions with additional bonus time.
-- [ ] Implement Repository and Service pattern.
+- [X] Implement Repository and Service pattern.
 
 --- 
 
