@@ -28,6 +28,8 @@ public class Program
             builder.Services.AddScoped<IQuestionService, QuestionService>();
             builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
             builder.Services.AddScoped<IAnswerService, AnswerService>();
+            builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
+            builder.Services.AddScoped<IScoreService, ScoreService>();
 
         var app = builder.Build();
 
