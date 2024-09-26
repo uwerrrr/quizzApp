@@ -6,7 +6,7 @@ public interface IQuestionRepository
 {
     Task<List<Question>> GetAllQuestionsWithAnswersAsync();
     Task<Question> GetQuestionWithAnswersByIdAsync(int questionId);
-    Task<Question> GetQuestionByIdAsync(int questionId);
+    Task<List<Question>> GetQuestionListWithAnswersByIdListAsync(List<int> idList);
     Task<bool> IsQuestionExistsAsync(int questionId);
     Task AddQuestionAsync(Question question);
     Task UpdateQuestionAsync(Question question);

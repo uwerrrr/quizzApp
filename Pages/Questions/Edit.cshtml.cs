@@ -9,8 +9,6 @@ namespace quizzApp.Pages.Questions;
 
 public class Edit : PageModel
 {
-    // db context
-    private readonly AppDbContext _context;
 
     // service
     private readonly IQuestionService _questionService;

@@ -8,7 +8,6 @@ public class QuestionRepository: IQuestionRepository
 // public class QuestionRepository
 {
     private readonly AppDbContext _context;
-    private IQuestionRepository _questionRepositoryImplementation;
 
     public QuestionRepository(AppDbContext context)
     {
@@ -28,11 +27,16 @@ public class QuestionRepository: IQuestionRepository
             .Include(q => q.Answers)
             .FirstOrDefaultAsync(q => q.Id == questionId);
     }
-
-    public async Task<Question> GetQuestionByIdAsync(int questionId)
+    
+    // get question list with its answers by given id list
+    public async Task<List<Question>> GetQuestionListWithAnswersByIdListAsync(List<int> idList)
     {
-        return await _context.Questions.FindAsync(questionId);
+        return await _context.Questions
+            .Where(q => idList.Contains(q.Id))
+            .Include(q => q.Answers)
+            .ToListAsync();
     }
+    
     
     public async Task<bool> IsQuestionExistsAsync(int questionId)
     {

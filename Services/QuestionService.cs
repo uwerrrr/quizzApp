@@ -20,10 +20,16 @@ public class QuestionService : IQuestionService
         return await _questionRepository.GetAllQuestionsWithAnswersAsync();
     }
     
-    // get a question with its answers
+    // get a question with its answers by id
     public async Task<Question> GetQuestionWithAnswersByIdAsync(int id)
     {
         return await _questionRepository.GetQuestionWithAnswersByIdAsync(id);
+    }
+    
+    // get question list with its answers by given id list
+    public async Task<List<Question>> GetQuestionListWithAnswersByIdListAsync(List<int> idList)
+    {
+        return await _questionRepository.GetQuestionListWithAnswersByIdListAsync(idList);
     }
 
     // add a question with its answers
@@ -66,7 +72,7 @@ public class QuestionService : IQuestionService
     public async Task RemoveQuestionWithAnswersByIdAsync(int id)
     {
         // Finds an entity with the given primary key values
-        var question = await _questionRepository.GetQuestionByIdAsync(id);
+        var question = await _questionRepository.GetQuestionWithAnswersByIdAsync(id);
 
         if (question != null)
         {
